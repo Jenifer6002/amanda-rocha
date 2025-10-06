@@ -3,135 +3,123 @@ from anvil import *
 
 class Form1(Form1Template):
   def __init__(self, **properties):
-    # Set Form properties and Data Bindings.
-    self.init_components(**properties)
+     self.init_components(**properties)
+     self.agendamento = []
+     self.button_salvar.set_event_handler('click',self.salvar_agendamento)
+    
+     def salvar_agendamento(self, **event_args):
+      data = self.date_picker_data.date
+      descricao = self.textbox_descricao.text
 
-    # Any code you write here will run before the form opens.   
-  INICIAR
-SistemaFisioterapia
-Bancodedadosfictício
-ListaPacientes = []
-Agenda = []
-Financeiro = []
+      if not data or not descricao:
+        alert("Preencha todos os campos!")
+        return
 
-ENQUANTOsistemaestiverrodandoFAÇA
-EXIBIRMenuPrincipal()
-FIMENQUANTO
+        novo = {"data": data, "descricao": descricao}
+        self.agendamentos.append(novo)
 
-MENUPRINCIPAL
-FUNÇÃOMenuPrincipal()
-EXIBIR 
-"======== MENU PRINCIPAL ========"
-EXIBIR
-"1. Agendar Consulta"
-EXIBIR
-"2. Ver Agenda"
-EXIBIR
-"3. Planilha Financeira"
-EXIBIR
-"4. Informações"
-EXIBIR
-"5. Sair"
+        self.repeating_panel_agendamentos.items = self.agendamentos
 
-OPÇÃO = LER_INPUT()
+        self.textbox_descricao.text = ""
+        self.date_picker_data.date = None
+        # Sistema de Agendamento - Clínica de Fisioterapia
+# Dados fictícios em memória
 
-ESCOLHAOPÇÃO
-CASO1:CHAMARAgendarConsulta()
-CASO2:CHAMARVerAgenda()
-CASO3:CHAMARGerenciarFinanceiro()
-CASO4:CHAMARInformacoes()
-CASO5:ENCERRARsistema
+lista_pacientes = []
+agenda = []
+financeiro = []
 
-EXIBIR
-"Opção inválida!"
-FIMESCOLHA
-FIMFUNÇÃO
+def menu_principal():
+  while True:
+    print("\n======== MENU PRINCIPAL ========")
+    print("1. Agendar Consulta")
+    print("2. Ver Agenda")
+    print("3. Planilha Financeira")
+    print("4. Informações")
+    print("5. Sair")
 
-AGENDAMENTODECONSULTAS
-FUNÇÃOAgendarConsulta()
-EXIBIR 
-"Nome do paciente:"
-nome = LER_INPUT()
+    opcao = input("Escolha uma opção: ")
 
-EXIBIR 
-"Data (dd/mm/aaaa):"
-data = LER_INPUT()
+    if opcao == "1":
+      agendar_consulta()
+    elif opcao == "2":
+      ver_agenda()
+    elif opcao == "3":
+      gerenciar_financeiro()
+    elif opcao == "4":
+      informacoes()
+    elif opcao == "5":
+      print("Encerrando o sistema... Até logo!")
+      break
+    else:
+      print("Opção inválida! Tente novamente.")
 
-EXIBIR
-"Horário (hh:mm):"
-hora = LER_INPUT()
+def agendar_consulta():
+  print("\n====== AGENDAR CONSULTA ======")
+  nome = input("Nome do paciente: ")
+  data = input("Data (dd/mm/aaaa): ")
+  hora = input("Horário (hh:mm): ")
 
-ADICIONAR
-{nome: nome, data: data, hora: hora};ÀAgenda
-EXIBIR
-"Consulta agendada com sucesso!"
-FIMFUNÇÃO
+  consulta = {"nome": nome, "data": data, "hora": hora}
+  agenda.append(consulta)
 
-FUNÇÃOVerAgenda()
-EXIBIR
-"===== AGENDA ====="
-PARAcadaconsultaEMAgendaFAÇA
-EXIBIR
-consulta["data"] + " às " + consulta["hora"] + " - " + consulta["nome"]
-FIMPARA
-FIMFUNÇÃO
+  print("✅ Consulta agendada com sucesso!")
 
-PLANILHAFINANCEIRA
-FUNÇÃOGerenciarFinanceiro()
-EXIBIR 
-"1. Adicionar entrada"
-EXIBIR 
-"2. Adicionar saída"
-EXIBIR
-"3. Ver saldo"
-OPÇÃO = LER_INPUT()
+def ver_agenda():
+  print("\n===== AGENDA DE CONSULTAS =====")
+  if not agenda:
+    print("Nenhuma consulta agendada.")
+    return
+  for consulta in agenda:
+    print(f"{consulta['data']} às {consulta['hora']} - {consulta['nome']}")
 
-ESCOLHAOPÇÃO
-CASO1:EXIBIR
-"Descrição da entrada:"
-desc = LER_INPUT()
-EXIBIR
-"Valor R$:"
-valor = LER_INPUT()
-ADICIONAR
-{tipo: "entrada", descricao: desc, valor: valor}; ÀFinanceiro
-EXIBIR
-"Entrada adicionada."
-CASO2:EXIBIR
-"Descrição da saída:"
-desc = LER_INPUT()
-EXIBIR 
-"Valor R$:"
-valor = LER_INPUT()
-ADICIONAR
-{tipo: "saída", descricao: desc, valor: valor}; ÀFinanceiro
-EXIBIR
-"Saída adicionada."
-CASO3:saldo = 0
-PARAcadaitemEMFinanceiroFAÇA
-SEitem["tipo"] == "entrada" 
-ENTÃO
-saldo += item["valor"]
-SENÃO
-saldo -= item["valor"]
-FIMPARA
-EXIBIR 
-"Saldo atual: R$" + saldo
-FIMESCOLHA
-FIMFUNÇÃO
+def gerenciar_financeiro():
+  print("\n===== PLANILHA FINANCEIRA =====")
+  print("1. Adicionar entrada")
+  print("2. Adicionar saída")
+  print("3. Ver saldo")
+  opcao = input("Escolha uma opção: ")
 
-MENUDEINFORMAÇÕES
-FUNÇÃOInformacoes()
-EXIBIR
-"====== INFORMAÇÕES ======"
-EXIBIR
-"Nome: Dra. Ana Clara - Fisioterapeuta"
-EXIBIR
-"Especialidades: Reabilitação, RPG, Pilates"
-EXIBIR
-"Endereço: Rua da Saúde, 123 - Centro"
-EXIBIR
-"Contato: (11) 99999-0000"
-EXIBIR
-"Horário de atendimento: Seg a Sex, 08:00 - 18:00"
-FIMFUNÇÃO
+  if opcao == "1":
+    desc = input("Descrição da entrada: ")
+    try:
+      valor = float(input("Valor R$: "))
+      financeiro.append({"tipo": "entrada", "descricao": desc, "valor": valor})
+      print("✅ Entrada adicionada.")
+    except ValueError:
+      print("Valor inválido!")
+  elif opcao == "2":
+    desc = input("Descrição da saída: ")
+    try:
+      valor = float(input("Valor R$: "))
+      financeiro.append({"tipo": "saída", "descricao": desc, "valor": valor})
+      print("✅ Saída adicionada.")
+    except ValueError:
+      print("Valor inválido!")
+  elif opcao == "3":
+    saldo = 0.0
+    for item in financeiro:
+      if item["tipo"] == "entrada":
+        saldo += item["valor"]
+      else:
+        saldo -= item["valor"]
+    print(f"💰 Saldo atual: R$ {saldo:.2f}")
+  else:
+    print("Opção inválida!")
+
+def informacoes():
+  print("\n====== INFORMAÇÕES DA CLÍNICA ======")
+  print("Nome: Dra. Ana Clara - Fisioterapeuta")
+  print("Especialidades: Reabilitação, RPG, Pilates")
+  print("Endereço: Rua da Saúde, 123 - Centro")
+  print("Contato: (11) 99999-0000")
+  print("Horário de atendimento: Seg a Sex, 08:00 - 18:00")
+
+# Iniciar o sistema
+if __name__ == "__main__":
+  print("Iniciando Sistema de Fisioterapia...")
+  menu_principal()
+
+
+
+# Any code you write here will run before the form opens.   
