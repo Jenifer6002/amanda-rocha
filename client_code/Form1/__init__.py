@@ -5,7 +5,6 @@ class Form1(Form1Template):
   def __init__(self, **properties):
      self.init_components(**properties)
      self.agendamento = []
-     self.button_salvar.set_event_handler('click',self.salvar_agendamento)
     
      def salvar_agendamento(self, **event_args):
       data = self.date_picker_data.date
