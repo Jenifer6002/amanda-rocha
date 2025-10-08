@@ -120,5 +120,3 @@ if __name__ == "__main__":
   menu_principal()
 
 
-
-# Any code you write here will run before the form opens.   
